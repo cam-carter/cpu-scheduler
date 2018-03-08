@@ -14,5 +14,7 @@ while True:
         break
 
 print = 'Process ' + repr(pid) + ' has been terminated.'
+sys.stdout.write('Process ' + repr(pid) + ' has been terminated.\n')
 print = 'Finishing at system time: ' + repr(sysclock)
+sys.stdout.write('Finished at system time: ' + repr(sysclock))
     

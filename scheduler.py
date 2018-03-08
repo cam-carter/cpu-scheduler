@@ -1,5 +1,3 @@
-import sys
-
 pid = 1
 process_exec_time = 5
 process_burst = 10

@@ -1,7 +1,16 @@
-class Process(object):
-    def __init__(self, arrival_time, total_cpu_time, cpu_burst, cpu_wait, pid):
-        self.arrival_time = arrival_time
-        self.total_cpu_time = total_cpu_time
-        self.cpu_burst = cpu_burst
-        self.cpu_wait = cpu_wait
-        slef.pid = pid
+pid = 1
+process_exec_time = 5
+process_burst = 10
+
+sysclock = 0
+while True:
+    if sysclock >= process_exec_time:
+        process_burst -= 1
+
+    sysclock += 1
+    if process_burst == 0:
+        break
+
+print = 'Process ' + pid + ' has been terminated.'
+print = 'Finishing at system time: ' + sysclock
+    

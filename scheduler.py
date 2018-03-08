@@ -13,5 +13,5 @@ while True:
     if process_burst == 0:
         break
 
-print 'Process ' + repr(pid) + ' has been terminated.'
-print 'Finishing at system time: ' + repr(sysclock)
+print('Process ' + repr(pid) + ' has been terminated.')
+print('Finishing at system time: ' + repr(sysclock))

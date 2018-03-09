@@ -2,8 +2,6 @@
 
 A simple CPU scheduler written in Python for COSCA365, Operating Systems.
 
-### Created by: @cam-carter & @tmloupe
-
 # Dictionary of Variables
 
 Note that because Python does not inherently declare variable types, we will list the type of value the variables will be used according to other languages. Additionally, other variables may be necessary, such as `temp` variables, which may not be reflected in the dictionary of variables. These will be made clear inside of the code.

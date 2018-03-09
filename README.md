@@ -25,3 +25,8 @@ In this program, we will be creating and using a `process` object.
 4. `total_cpu_time` - this variable will hold the process' total burst time, an `int`.
 5. `process_exec_time` - this variable will hold the time in which the process arrives into the queue, an `int`.
 6. `process_wait` - this variable, an `int`, will hold the process' current wait time, which will be decremented in the wait queue.
+
+## Queues
+
+1. `ready` - this queue will be the "ready" queue for `process` objects that are ready to be run by the CPU.
+2. `wait` - this queue will be the "wait" queue for `process` objects that are waiting for their wait time to decrease.

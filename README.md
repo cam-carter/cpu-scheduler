@@ -1,6 +1,6 @@
 # CPU Scheduler Simulator
 
-A simple CPU scheduler written in Python for COSCA365, Operating Systems.
+A simple CPU scheduler written in Python for COSCA365, Operating Systems.  This simulation implements a FCFS scheduling algorithm.
 
 # Dictionary of Variables
 

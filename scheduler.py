@@ -31,15 +31,16 @@ while True:
         burst_time -= 1
         time_quantum_temp += 1
 
+    # increments system clock
+    sysclock += 1
+    
     # performs a context switch once the time_quantum_temp becomes greater than
     # the time quantum
+    # TODO: utilize one time quantum and not two variables
     if time_quantum_temp > time_quantum:
         sysclock += 5
         time_quantum_temp = 0
         continue
-
-    # increments system clock
-    sysclock += 1
 
     # checks it process_burst has reached zero and breaks the loop
     if burst_time == 0:

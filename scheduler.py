@@ -1,44 +1,30 @@
 # import the queue library
 from queue import *
+from collections import deque
+from process import Process
 
-class Process:
-    def __init__(self, pid, arrival_time):
-        self.pid = pid
-        self.arrival_time = arrival_time
-        self.burst_times = deque([])
-        self.wait_times = deque([])
-
-    def create_process(inputfile):
-        inputfile = open(filename)
-        lines = inputfile.readlines()
-        self.pid = lines[0]
-        self.arrival_time = lines[1]
-        self.burst_times = deque([lines[2], lines[4]])
-        self.wait_times = deque([lines[3], lines[5]])
-
-# max amount of time for CPU to burst, with a temporary holding value
-
-# creating the ready queue with a max size of 1
+number_of_processes = 3
+process_list = deque([])
 ready = Queue(maxsize=1)
+process1 = Process()
+process1.create('process1.txt')
 
-# process id is uniquely assigned to each process
-pid = 1
+pid = process1.pid
 # process arrival time
 process_arrival_time = 5
 # process burst time
 process_burst = 10
 
-# Puts the process burst into the queue, for testing purposes
-ready.put(process_burst)
-
+burst_time = process1.get_burst()
 # Defines a test variable for burst time to use in queue
-burst_time = ready.get()
+# burst_time = ready.get()
 
 # system clock
 sysclock = 0
 time_quantum = 5
 time_quantum_temp = 0
 # infinite loop, breaks when process_burst is decremented to 0
+i = 1
 while True:
     # checks process arrival time against the system clock
     if sysclock >= process_arrival_time:

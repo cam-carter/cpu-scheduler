@@ -1,24 +1,22 @@
 from collections import deque
 
 class Process:
-    def __init__(self, pid, arrival_time):
-        self.pid = pid
-        self.arrival_time = arrival_time
+    def __init__(self):
         self.burst_times = deque([])
         self.wait_times = deque([])
 
-    def create_process(filename):
+    def create(self, filename):
         inputfile = open(filename)
         lines = inputfile.readlines()
-        self.pid = lines[0]
-        self.arrival_time = lines[1]
-        self.burst_times = deque([lines[2], lines[4]])
-        self.wait_times = deque([lines[3], lines[5]])
+        self.pid = int(lines[0].rstrip('\n'))
+        self.arrival_time = int(lines[1].rstrip('\n'))
+        self.burst_times = deque([int(lines[2].rstrip('\n')), int(lines[4].rstrip('\n'))])
+        self.wait_times = deque([int(lines[3].rstrip('\n')), int(lines[5].rstrip('\n'))])
 
-    def get_burst():
+    def get_burst(self):
         burst_time = self.burst_times.popleft()
         return burst_time
 
-    def get_wait():
+    def get_wait(self):
         wait_time = self.wait_times.popleft()
         return wait_time

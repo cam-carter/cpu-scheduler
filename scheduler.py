@@ -1,6 +1,21 @@
 # import the queue library
 from queue import *
 
+class Process:
+    def __init__(self, pid, arrival_time):
+        self.pid = pid
+        self.arrival_time = arrival_time
+        self.burst_times = deque([])
+        self.wait_times = deque([])
+
+    def create_process(inputfile):
+        inputfile = open(filename)
+        lines = inputfile.readlines()
+        self.pid = lines[0]
+        self.arrival_time = lines[1]
+        self.burst_times = deque([lines[2], lines[4]])
+        self.wait_times = deque([lines[3], lines[5]])
+
 # max amount of time for CPU to burst, with a temporary holding value
 
 # creating the ready queue with a max size of 1

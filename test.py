@@ -50,14 +50,14 @@ while True:
             wait_queue.put(running_process)
             sysclock += 5
             burst_time = 0
-            is_decalred = False
+            is_declared = False
             running_process = None
         elif time_quantum == 0:
             running_process.burst_times.appendleft(burst_time)
             ready_queue.put(running_process)
             sysclock += 5
             burst_time = 0
-            is_decalred = False
+            is_declared = False
             running_process = None
             time_quantum = 5
         else:

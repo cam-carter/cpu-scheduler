@@ -34,14 +34,17 @@ while True:
 
     if wait_process is None:
         try:
-            waiting_process
+            waiting_process = waiting_queue.get(False)
+            print('Currently waiting process: ' + repr(waiting_process.pid))
+        except Empty:
+            pass
 
     if running_process != None:
         if burst_time == 0 and is_declared is False:
                 burst_time = running_process.get_burst()
                 is_declared = True
                 print(burst_time)
-        elif: burst_time == 0 and is_declared is True:
+        elif burst_time == 0 and is_declared is True:
             wait_queue.put(running_process)
             sysclock += 5
             burst_time = 0

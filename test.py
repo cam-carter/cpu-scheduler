@@ -49,9 +49,8 @@ while True:
         elif burst_time == 0 and is_declared is True:
             wait_queue.put(running_process)
             sysclock += 5
-            burst_time = 0
-            is_declared = False
-            running_process = None
+            running_process = ready_queue.get()
+            burst_time = running_process.get_burst()
         elif time_quantum == 0:
             running_process.burst_times.appendleft(burst_time)
             ready_queue.put(running_process)
@@ -72,9 +71,8 @@ while True:
         elif wait_time == 0 and wait_declared is True:
             ready_queue.put(waiting_process)
             sysclock += 5
-            burst_time = 0
-            wait_declared = False
-            waiting_process = None
+            waiting_process = wwait_queue.get()
+            wait_time = waiting_process.get()
         else:
             wait_time -= 1
 

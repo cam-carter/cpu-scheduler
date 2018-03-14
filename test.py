@@ -3,6 +3,7 @@ from Queue import Empty
 from src.process import Process
 
 ready_queue = Queue(maxsize=3)
+wait_queue = Queue(maxsize=3)
 process = {}
 
 number_of_processes = 3
@@ -33,9 +34,9 @@ while True:
         except Empty:
             pass
 
-    if wait_process is None:
+    if waiting_process is None:
         try:
-            waiting_process = waiting_queue.get(False)
+            waiting_process = wait_queue.get(False)
             print('Currently waiting process: ' + repr(waiting_process.pid))
         except Empty:
             pass
@@ -77,7 +78,8 @@ while True:
         else:
             wait_time -= 1
 
-
+    if ready_queue.empty() is True and wait_queue.empty() is True:
+        break
     sysclock += 1
 
 

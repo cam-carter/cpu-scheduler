@@ -10,10 +10,11 @@ sysclock = 0
 
 burst_time = 0
 is_declared = False
+wait_declared = False
 wait_time = 0
 
 running_process = None
-waiting_process = Process()
+waiting_process = None
 
 for i in range(1, number_of_processes + 1):
     process[i] = Process()
@@ -41,9 +42,9 @@ while True:
 
     if running_process != None:
         if burst_time == 0 and is_declared is False:
-                burst_time = running_process.get_burst()
-                is_declared = True
-                print(burst_time)
+            burst_time = running_process.get_burst()
+            is_declared = True
+            print(burst_time)
         elif burst_time == 0 and is_declared is True:
             wait_queue.put(running_process)
             sysclock += 5
@@ -62,8 +63,21 @@ while True:
             bust_time -= 1
             time_quantum -= 1
 
+    if waiting_process != None:
+        if wait_time == 0 and wait_declared is False:
+            wait_time = waiting_process.get_wait()
+            wait_declared = True
+            print('wait time: ' + repr(wait_time))
+        elif wait_time == 0 and wait_declared is True:
+            ready_queue.put(waiting_process)
+            sysclock += 5
+            burst_time = 0
+            wait_declared = False
+            waiting_process = None
+        else:
+            wait_time -= 1
 
-            
+
     sysclock += 1
 
 

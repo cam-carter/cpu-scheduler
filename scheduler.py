@@ -23,8 +23,7 @@ sysclock = 0
 i = 1
 time_quantum = 5
 
-burst_time
-burst_time is None
+burst_time = None
 wait_time = None
 running_process = None
 waiting_process = None
@@ -38,9 +37,12 @@ while True:
             ready_queue.put(process[j])
         j += 1
 
+    print_queue(ready_queue)
+
     # check if there is a running process, if not get one from the ready_queue
     if running_process == None:
         try:
+            running_process = Process()
             running_process = ready_queue.get(False)
         except Empty:
             running_process = None
@@ -57,8 +59,8 @@ while True:
     # else decrement burst_time
     if burst_time is None:
         try:
-            burst_time = 0
-            burst_time = running_process.get_burst()
+            int(burst_time or 0)
+            #burst_time = running_process.get_burst()
         except Empty:
             if running_process.wait_times:
                 pass
@@ -86,7 +88,8 @@ while True:
 
     if wait_time == None:
         try:
-            wait_time = waiting_process.get_wait()
+            #wait_time = waiting_process.get_wait()
+            pass
         except Empty:
             if waiting_process.burst_times:
                 pass

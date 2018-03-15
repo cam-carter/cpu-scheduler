@@ -1,106 +1,135 @@
-# import the queue library
-from src.utils import *
 from multiprocessing import Queue
 from Queue import Empty
-from collections import deque
 from src.process import Process
 
-number_of_processes = 3
-ready_queue = Queue()
-wait_queue = Queue()
-done = Queue()
-
-# declare process dictionary
+ready_queue = Queue(maxsize=3)
+wait_queue = Queue(maxsize=3)
 process = {}
 
-# for loop from 1 to 4 crates processes from file
-for i in range(1, number_of_processes + 1):
-    process[i] = Process()
-    process[i].create('processes/process%d.txt' % (i))
-    # ready_queue.put(process[i])
-
+number_of_processes = 3
 sysclock = 0
-i = 1
+burst_time = 0
+wait_time = 0
 time_quantum = 5
+switch_counter = 1
 
-burst_time = None
-wait_time = None
 running_process = None
 waiting_process = None
+cpu_busy = False
+context_switch = False
+
+
+for i in range(1, number_of_processes + 1):
+    process[i] = Process()
+    process[i].create('processes/process%d.txt' % i)
 
 while True:
+    # adds processes to the ready queue at there specified arrival times
+    for i in range (1, number_of_processes + 1):
+        if sysclock == process[i].arrival_time:
+            ready_queue.put(process[i])
+            print('Process ' + repr(process[i].pid) + ' has arrived.')
 
-    # checks arrival time of each process against the system clock
-    # if sysclock == arrival_time add process to ready_queue
-    for j in range (1, number_of_processes + 1):
-        if sysclock == process[j].arrival_time:
-            ready_queue.put(process[j])
-        j += 1
+    print(sysclock)
+    print('cpu flag = ' + repr(cpu_busy))
+    print('context switch = ' + repr(context_switch))
+    print('time quantum = ' + repr(time_quantum))
+    print('burst time = ' + repr(burst_time))
+    print('wait time = ' + repr(wait_time))
+    if running_process != None:
+        print('running process = ' + repr(running_process.pid))
+    else:
+        print('running process is none')
+    if waiting_process != None:
+        print('waiting process = ' + repr(waiting_process.pid))
+    else:
+        print('waiting_process is none')
 
-    print_queue(ready_queue)
 
-    # check if there is a running process, if not get one from the ready_queue
-    if running_process == None:
-        try:
-            running_process = Process()
-            running_process = ready_queue.get(False)
-        except Empty:
-            running_process = None
+    if sysclock > 250:
+        halt = input('press any to continue')
+    # if running_process is empty pull process from ready_queue
+    # if ready_queue is empty pass
+    if context_switch == True:
+        switch_counter += 1
+        sysclock += 1
+        if switch_counter > 5:
+            context_switch = False
+            switch_counter = 1
+        continue
 
     if waiting_process == None:
         try:
             waiting_process = wait_queue.get(False)
+            wait_time = waiting_process.get_wait()
         except Empty:
-            waiting_process = None
-
-    # check if there is a currently assigned burst_time, if not get one from the running_process
-    # check if burst_time == 0, if so puts the running_process into the wait_queue
-    #   also performs a context switch
-    # else decrement burst_time
-    if burst_time is None:
-        try:
-            int(burst_time or 0)
-            #burst_time = running_process.get_burst()
-        except Empty:
-            if running_process.wait_times:
-                pass
-            else:
-                print('Process ' + repr(running_process.pid) + ' terminated at sysclock ' + repr(sysclock))
-    elif burst_time == 0:
-        wait_queue.put(running_process)
-        sysclock += 5
-        burst_time = None
-        running_process = None
-    elif time_quantum == 0:
-        running_process.burst_times.appendleft(burst_time)
-        ready_queue.put(running_process)
-        try:
-            running_process = ready_queue.get()
-        except Empty:
-            running_process = None
-        try:
-            burst_time = runing_process.get_burst()
-        except Empty:
-            burst_time = None
-    else:
-        burst_time -= 1
-        time_quantum -= 1
-
-    if wait_time == None:
-        try:
-            #wait_time = waiting_process.get_wait()
             pass
+
+    if cpu_busy == False:
+        try:
+            running_process = ready_queue.get(False)
+            burst_time = running_process.get_burst()
+            cpu_busy = True
+            print('Currently running process: ' + repr(running_process.pid))
         except Empty:
-            if waiting_process.burst_times:
-                pass
-            else:
-                print('Process ' + repr(waiting_process.pid) + ' terminated at sysclock ' + repr(sysclock))
-    elif wait_time == 0:
-        ready_queue.put(waiting_process)
-        sysclock += 5
-        wait_time = None
-        waiting_process = None
+            pass
     else:
+        time_quantum -= 1
+        burst_time -= 1
+
+    if waiting_process != None:
         wait_time -= 1
-    
+
+    if wait_time == 0:
+        if waiting_process != None:
+            if waiting_process.burst_times:
+                print('Moving waiting process into ready queue')
+                ready_queue.put(waiting_process)
+                context_switch = True
+                waiting_process = None
+            else:
+                print('x')
+                waiting_process = None
+                number_of_processes -= 1
+
+    if running_process != None:
+        if time_quantum == 0 and burst_time > 0:
+            cpu_busy = False
+            context_switch = True
+            running_process.burst_times.appendleft(burst_time)
+            print('moving running process into ready queue')
+            ready_queue.put(running_process)
+            time_quantum = 5
+
+        if time_quantum == 0 and burst_time == 0:
+            cpu_busy = False
+            context_switch = True
+            if running_process != None:
+                if running_process.wait_times:
+                    print('moving running process to wait queue')
+                    wait_queue.put(running_process)
+                    running_process = None
+                else:
+                    print('y')
+                    waiting_process = None
+                    number_of_processes -= 1
+            time_quantum = 5
+
+        if time_quantum > 0 and burst_time == 0:
+            cpu_busy = False
+            context_switch = True
+            if running_process != None:
+                print('Running process before context switch = ' + repr(running_process.pid))
+                if running_process.wait_times:
+                    print('moving running process to wait queue')
+                    wait_queue.put(running_process)
+                    running_process = None
+                else:
+                    print('z')
+                    waiting_process = None
+                    number_of_processes -= 1
+
+    print('# of processes ' + repr(number_of_processes))
+    if number_of_processes == 0:
+        break
     sysclock += 1

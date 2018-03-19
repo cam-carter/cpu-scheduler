@@ -1,3 +1,4 @@
+import argparse
 from multiprocessing import Queue
 from Queue import Empty
 from src.process import Process
@@ -6,18 +7,21 @@ ready_queue = Queue(maxsize=3)
 wait_queue = Queue(maxsize=3)
 process = {}
 
+parser = argparse.ArgumentParser(description='Take time quantum')
+parser.add_argument('time_quantum', type=int, help='time quantum')
+args = parser.parse_args()
+
 number_of_processes = 3
 sysclock = 0
 burst_time = 0
 wait_time = 0
-time_quantum = 5
+time_quantum = args.time_quantum
 switch_counter = 1
 
 running_process = None
 waiting_process = None
 cpu_busy = False
 context_switch = False
-
 
 for i in range(1, number_of_processes + 1):
     process[i] = Process()
@@ -46,7 +50,7 @@ while True:
         print('waiting_process is none')
 
 
-    if sysclock > 250:
+    if sysclock > 350:
         halt = input('press any to continue')
     # if running_process is empty pull process from ready_queue
     # if ready_queue is empty pass

@@ -6,7 +6,7 @@ To run simply input the following into your cli:
 ```
 $ python scheduler.py 10
 ```
-where the number `10` here is your inputed `time_quantum` for the program.  You can input any time quantum you like as long as its an `int`.
+The number `10` here is your inputed `time_quantum` for the program.  You can input any time quantum you like as long as its an `int`.
 
 # Dictionary of Variables
 

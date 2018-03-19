@@ -2,6 +2,10 @@
 
 A simple CPU scheduler written in Python for COSCA365, Operating Systems.  This simulation implements a FCFS scheduling algorithm.
 
+To run simply input the following into your cli:
+    $ python scheduler.py 10
+where the number `10` here is your inputed `time_quantum` for the program.  You can input any time quantum you like as long as its an `int`.
+
 # Dictionary of Variables
 
 Note that because Python does not inherently declare variable types, we will list the type of value the variables will be used according to other languages. Additionally, other variables may be necessary, such as `temp` variables, which may not be reflected in the dictionary of variables. These will be made clear inside of the code.
@@ -11,7 +15,7 @@ Note that because Python does not inherently declare variable types, we will lis
 2. `time_quantum`- time quantum for the program. Givin by a command line argument to the scheduler, ex. `python scheduler.py 10` where the number `10` is the program `time_quantum`
 3. `number_of_processes` - total number of processes for the scheduler.  Hard-coded into the pogram and is decremented whenever a process is terminated; once `number_of_processes == 0` the main loop breaks and the program is halted.
 4. `total_processes` - set equal to the `number_of_processes` in the beginning of the pogram.  Since `number_of_processes` is decremented, `total_processes` is used make runtime calculations after main loop is broken.
-5. `avg_waiting` - this variable will take the `int` type and it will hold the average waiting time of each process.
+5. `switch_counter` - used to count number of loops during a `context_switch`. Initially it is set to `1` and when `switch_counter > 5` the `context_switch` breaks
 6. `num_context` - this variable will take the `int` type and it will hold the total number of context switches performed.
 7. `cpu_util` - this variable will take the `float` type and it will display the percentage of total time the CPU is running.
 8. `parser` - the `ArgumentParser` object imported from Python's `argparse` module. Allows the use of command line arguments, so the user can input `time_quantum`
